@@ -2,42 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 
-// Web Speech API interface declarations
-interface SpeechRecognitionEvent {
-  resultIndex: number;
-  results: {
-    [index: number]: {
-      [index: number]: {
-        transcript: string;
-      };
-      isFinal: boolean;
-    };
-  };
-}
-
-interface SpeechRecognitionErrorEvent {
-  error: string;
-}
-
-interface SpeechRecognitionInstance {
-  continuous: boolean;
-  interimResults: boolean;
-  lang: string;
-  start: () => void;
-  stop: () => void;
-  onresult: (event: SpeechRecognitionEvent) => void;
-  onerror: (event: SpeechRecognitionErrorEvent) => void;
-  onend: () => void;
-}
-
-type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
-
-declare global {
-  interface Window {
-    SpeechRecognition?: SpeechRecognitionConstructor;
-    webkitSpeechRecognition?: SpeechRecognitionConstructor;
-  }
-}
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type SpeechRecognitionInstance = any;
+type SpeechRecognitionEvent = any;
+type SpeechRecognitionErrorEvent = any;
 
 export default function Home() {
   const [isRecording, setIsRecording] = useState(false);
@@ -49,7 +17,8 @@ export default function Home() {
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
   useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const win = typeof window !== "undefined" ? (window as any) : {};
+    const SpeechRecognition = win.SpeechRecognition || win.webkitSpeechRecognition;
 
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition();
