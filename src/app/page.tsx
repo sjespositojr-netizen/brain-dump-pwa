@@ -26,13 +26,13 @@ export default function Home() {
       recognition.interimResults = true;
       recognition.lang = "en-US";
 
-      recognition.onresult = (event: SpeechRecognitionEvent) => {
-        let currentTranscript = "";
-        for (let i = 0; i < event.results.length; i++) {
-          currentTranscript += event.results[i][0].transcript;
-        }
-        setTranscript(currentTranscript);
-      };
+recognition.onresult = (event: SpeechRecognitionEvent) => {
+  let finalTranscript = "";
+  for (let i = 0; i < event.results.length; i++) {
+    finalTranscript += event.results[i][0].transcript;
+  }
+  setTranscript(finalTranscript);
+};
 
       recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error("Speech Recognition Error:", event.error);
